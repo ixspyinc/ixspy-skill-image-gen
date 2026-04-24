@@ -1,5 +1,5 @@
 ---
-name: ixspy-image-gen
+name: ixspy-skill-image-gen
 description: Use this skill when the user wants to generate AI images, such as replacing image backgrounds, recoloring products, smart expanding images, or creating custom compositions using the IXSPY AI API. Whenever a user asks to modify an image using AI features like "change color", "replace background", "redraw part of image", or "translate text in image", this skill should be invoked. It can also be used to check task status, list recent tasks, and download high-resolution results for existing tasks.
 ---
 
@@ -85,7 +85,7 @@ Use the Bash tool to execute the Python script.
 # (确保 API Key 已经在环境变量 IXSPY_API_KEY 中配置好)
 
 # To generate an image:
-python ixspy-image-gen/scripts/generate_image.py \
+python ixspy-skill-image-gen/scripts/generate_image.py \
   --action "generate" \
   --type "TASK_TYPE" \
   --original_image "path/to/local/image.jpg" \
@@ -96,13 +96,13 @@ python ixspy-image-gen/scripts/generate_image.py \
   [--color "#ff0000ff"]
 
 # To check status:
-python ixspy-image-gen/scripts/generate_image.py --action status --task_id 123
+python ixspy-skill-image-gen/scripts/generate_image.py --action status --task_id 123
 
 # To list tasks:
-python ixspy-image-gen/scripts/generate_image.py --action list_tasks --limit 5
+python ixspy-skill-image-gen/scripts/generate_image.py --action list_tasks --limit 5
 
 # To download high-res result:
-python ixspy-image-gen/scripts/generate_image.py --action download --task_id 123 --output_dir "./outputs"
+python ixspy-skill-image-gen/scripts/generate_image.py --action download --task_id 123 --output_dir "./outputs"
 ```
 
 ### Parsing the Output / 解析输出结果
