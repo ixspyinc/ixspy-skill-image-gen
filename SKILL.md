@@ -19,6 +19,12 @@ This skill relies on a bundled Python script (`scripts/generate_image.py`) that 
 
 **You DO NOT need to write `curl` commands or handle the polling yourself. Just execute the Python script.**
 **你不需要手写 `curl` 命令，也不需要手动处理轮询。只需执行 Python 脚本即可。**
+**After successfully submitting the drawing task and obtaining the `task_id`, the system will poll and wait for the task to complete. During this waiting period, the task will not be submitted again.**
+**提交作图任务成功并获取到`task_id`之后,则轮询等待任务完成，等待期间不再重复提交任务。**
+**When the user submits multiple drawing tasks in a batch, the Agent must run in single-process mode and execute the drawing tasks sequentially. Submit the next drawing task only after the previous drawing task has completed, and ensure each drawing task is successfully submitted exactly once.**
+**当用户采用批量提交多任务的方式时，Agent 只能以单进程模式顺序执行每个作图任务。必须等待前一个作图任务完成之后，才能提交下一个作图任务，并确保每个作图任务只成功提交一次。**
+**After the task is completed, it will take approximately 30 seconds to obtain the high-resolution image.**
+**任务完成之后，需要大约30秒之后，才能获取高清图片。**
 
 ## Prerequisites / 前置条件
 
@@ -122,6 +128,12 @@ For `generate` and `download` actions, it prints a final JSON block:
 
 For `status` or `list_tasks`, it prints the respective JSON array or object.
 如果是状态或列表查询，它会打印相应的数据 JSON。
+
+After returning or parsing the JSON result, if the user asks to display the result in table mode, present a Markdown table in the conversation. Use the JSON as the source of truth and include these columns when the data is available: `任务编号`、`任务ID`、`任务类型`、`原图`、`高清结果图(本地)`、`任务状态`、`作图描述`、`完成时间`. If a field is missing from the JSON, leave the cell empty or use `-`.
+返回或解析 JSON 结果之后，如果用户要求以表格模式输出，可以在对话中展示 Markdown 表格。表格以 JSON 数据为准，在数据可用时包含以下字段：`任务编号`、`任务ID`、`任务类型`、`原图`、`高清结果图(本地)`、`任务状态`、`作图描述`、`完成时间`。如果 JSON 中缺少某个字段，对应单元格留空或填 `-`。
+
+**In the user's chat window, if the user does not specify a particular expenditure output format, the results will be displayed in the table format shown above by default.**
+**在用户的聊天窗口中，如果用户没有特定支出输出格式，默认将结果以如上的表格形式展示。**
 
 If it fails, it will print:
 如果失败了，它会打印：
