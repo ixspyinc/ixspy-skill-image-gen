@@ -1,6 +1,6 @@
 ---
 name: ixspy-skill-image-gen
-description: Use this skill when the user wants to generate AI images, such as replacing image backgrounds, recoloring products, smart expanding images, or creating custom compositions using the IXSPY AI API. Whenever a user asks to modify an image using AI features like "change color", "replace background", "redraw part of image", or "translate text in image", this skill should be invoked. It can also be used to check task status, list recent tasks, and download high-resolution results for existing tasks.
+description: Use this skill when the user wants to generate AI images from a prompt alone or modify images using the IXSPY AI API, such as replacing backgrounds, recoloring products, smart expanding images, or creating custom compositions. It can also check task status, list recent tasks, and download high-resolution results.
 ---
 
 # IXSPY AI Image Generation Skill
@@ -62,8 +62,8 @@ You must map the user's intent to one of the following task types:
 
 1. `custom_composition_multi` (Custom Composition Multi / 自由构图-多图): Combine multiple images (max 5) based on a prompt.
    - Requires: `--original_image` (multiple paths allowed), `--prompt`, `--ratios`
-2. `custom_composition` (Custom Composition / 自由构图): Modify a single image based on a prompt.
-   - Requires: `--original_image`, `--prompt`, `--ratios`
+2. `custom_composition` (Custom Composition / 自由构图): Generate an image from a prompt alone, or modify a single image based on a prompt.
+   - Requires: `--prompt`. Optional: `--original_image` (omit it for prompt-only generation), `--ratios` (defaults to `auto`).
 3. `scene_replacement` (Scene Replacement / 场景替换): Replace the background/scene of an image.
    - Requires: `--original_image`, `--ratios`, and AT LEAST ONE OF (`--prompt` or `--reference_image`)
 4. `product_replacement` (Product Replacement / 商品替换): Place a product onto a reference background.
@@ -90,16 +90,23 @@ Use the Bash tool to execute the Python script.
 # Ensure the API Key is set in the environment variable IXSPY_API_KEY first
 # (确保 API Key 已经在环境变量 IXSPY_API_KEY 中配置好)
 
-# To generate an image:
+# To generate an image (omit --original_image for prompt-only custom_composition):
 python ixspy-skill-image-gen/scripts/generate_image.py \
   --action "generate" \
   --type "TASK_TYPE" \
-  --original_image "path/to/local/image.jpg" \
+  [--original_image "path/to/local/image.jpg"] \
   --output_dir "path/to/save/output_dir" \
   [--prompt "your descriptive prompt"] \
   [--ratios "16:9"] \
   [--reference_image "path/to/ref.jpg"] \
   [--color "#ff0000ff"]
+
+# Prompt-only custom composition:
+python ixspy-skill-image-gen/scripts/generate_image.py \
+  --action generate \
+  --type custom_composition \
+  --prompt "A clean geometric composition with an orange circle" \
+  --output_dir "path/to/save/output_dir"
 
 # To check status:
 python ixspy-skill-image-gen/scripts/generate_image.py --action status --task_id 123
